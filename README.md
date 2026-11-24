@@ -11,7 +11,7 @@
 | Magd Shalaby | 2210213583 | Collected 150 records. |
 
 - **Public Web GIS:** [Konya Land Valuation on Render](https://konya-parcel-valuation-cme434.onrender.com/).
-- **Zenodo DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24509185.svg)](https://doi.org/10.5281/zenodo.24509185)
+- **Zenodo DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24509348.svg)](https://doi.org/10.5281/zenodo.24509348)
 
 ## Results
 

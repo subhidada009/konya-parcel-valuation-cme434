@@ -9,5 +9,6 @@ authors:
   - given-names: Magd
     family-names: Shalaby
     affiliation: Karabük University
-version: 1.0.0
+version: 1.0.1
+doi: 10.5281/zenodo.24509348
 repository-code: https://github.com/subhidada009/konya-parcel-valuation-cme434
