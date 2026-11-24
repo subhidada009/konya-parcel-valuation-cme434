@@ -25,7 +25,7 @@ Map.centerObject(konya,8);
 Map.addLayer(composite,rgbStyle,'Sentinel-2 RGB · 20 Oct–24 Nov 2026');
 Map.addLayer(konya.style({color:'FCE9AA',width:2,fillColor:'00000000'}),{},'Konya Province');
 var stamp = ui.Label('Konya · Sentinel-2 image dates loading…');
-Map.add(ui.Panel({widgets:[stamp],style:{position:'bottom-left',backgroundColor:'ffffffcc',padding:'6px'}}));
+Map.add(ui.Panel({widgets:[stamp],style:{position:'bottom-left',backgroundColor:'#ffffff',padding:'6px'}}));
 dates.evaluate(function(values,error) {
   if (error || !values || !values.length) { stamp.setValue('Sentinel-2 acquisition dates unavailable'); return; }
   stamp.setValue('Konya · Sentinel-2 acquisitions: '+values[0]+' to '+values[values.length-1]);
@@ -33,15 +33,20 @@ dates.evaluate(function(values,error) {
 print('Sentinel-2 scene acquisition dates (UTC)',dates);
 print('Sentinel-2 scene count',images.size());
 print('Konya boundary count',konya.size());
-var ndvi = composite.normalizedDifference(['B8','B4']).rename('ndvi');
-var ndbi = composite.normalizedDifference(['B11','B8']).rename('ndbi');
-var mndwi = composite.normalizedDifference(['B3','B11']).rename('mndwi');
+var grid = ee.Projection('EPSG:32636').atScale(200);
+var working = composite.setDefaultProjection(grid);
+var ndvi = working.normalizedDifference(['B8','B4']).rename('ndvi');
+var ndbi = working.normalizedDifference(['B11','B8']).rename('ndbi');
+var mndwi = working.normalizedDifference(['B3','B11']).rename('mndwi');
 var dem = ee.ImageCollection('COPERNICUS/DEM/GLO30').select('DEM').mosaic()
   .setDefaultProjection('EPSG:32636',null,30).rename('elevation');
 var slope = ee.Terrain.slope(dem).rename('slope');
 var kernel = ee.Kernel.circle({radius:600,units:'meters'});
-var features = ndvi.addBands([ndbi,mndwi,dem,slope])
-  .reduceNeighborhood({reducer:ee.Reducer.mean(),kernel:kernel}).clip(area);
+var features = ndvi.addBands([ndbi,mndwi,dem.setDefaultProjection(grid),slope.setDefaultProjection(grid)])
+  .reduceNeighborhood({reducer:ee.Reducer.mean().combine(ee.Reducer.stdDev(),'',true),kernel:kernel})
+  .select(['ndvi_mean','ndbi_mean','mndwi_mean','elevation_mean','slope_mean','ndvi_stdDev','elevation_stdDev'],
+          ['ndvi_600m','ndbi_600m','mndwi_600m','elevation_600m','slope_600m','ndvi_sd_600m','elevation_sd_600m'])
+  .clip(area);
 Export.image.toDrive({image:composite.visualize(rgbStyle),description:'Konya_Sentinel2_RGB_20261020_20261124',
   region:area,scale:200,crs:'EPSG:32636',maxPixels:1e9});
 Export.image.toDrive({image:features.toFloat(),description:'Konya_GEE_Features_600m',

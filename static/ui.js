@@ -2,6 +2,7 @@
 
 const el = id => document.getElementById(id);
 const fmt = (value, digits = 0) => Number(value).toLocaleString("en-US", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+const unitPrice = value => fmt(value, value < 1 ? 2 : value < 10 ? 1 : 0);
 const signed = (value, digits = 1) => `${value > 0 ? "+" : ""}${fmt(value, digits)}`;
 const state = { version: sessionStorage.getItem("konya-version") || "v1.0.0", view:"explore",
   scenario:null, picking:false, overlay:null, pin:null, scenarioPin:null, listing:null, estimate:null, requestId:0 };
@@ -87,7 +88,7 @@ function listingCard(item) {
   const button = element("button",undefined,"listing");
   button.type = "button";
   button.append(element("strong",`${item.parcel_id} · ${item.imar_durumu}`),element("span",`${fmt(item.price_tl)} TL`),
-    element("small",`${fmt(item.area_m2)} m² · ${fmt(item.unit_tl_m2)} TL/m²`),
+    element("small",`${fmt(item.area_m2)} m² · ${unitPrice(item.unit_tl_m2)} TL/m²`),
     element("span",`${signed(item.asking_gap_pct)}%`, `gap ${item.asking_gap_pct < -15 ? "good" : item.asking_gap_pct > 15 ? "bad" : ""}`));
   button.addEventListener("click",()=>selectListing(item,true));
   return button;
