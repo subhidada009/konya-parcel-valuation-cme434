@@ -12,6 +12,7 @@
 
 - **Public Web GIS:** [Konya Land Valuation on Render](https://konya-parcel-valuation-cme434.onrender.com/).
 - **Zenodo DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24509184.svg)](https://doi.org/10.5281/zenodo.24509184)
+- **Archived version v1.1.0:** [10.5281/zenodo.24509778](https://doi.org/10.5281/zenodo.24509778).
 - **Dated Sentinel-2 RGB:** [Executed Earth Engine Code Editor snapshot](https://code.earthengine.google.com/9311d2e6c06bdaf77984c75cc689e4dd).
 
 ## Results
