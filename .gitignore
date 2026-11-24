@@ -1,0 +1,16 @@
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+.env
+*.osm.pbf
+*.pyc
+private/
+*PRIVATE*
+*private*
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+regression_dataset.csv
