@@ -6,9 +6,10 @@ var konya = ee.FeatureCollection('FAO/GAUL/2015/level1')
   .filter(ee.Filter.eq('ADM0_NAME', 'Turkey'))
   .filter(ee.Filter.eq('ADM1_NAME', 'Konya'));
 var area = konya.geometry();
+var buffered = area.buffer(12000);
 var bands = ['B2','B3','B4','B8','B11'];
 var images = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
-  .filterBounds(area).filterDate(start,end)
+  .filterBounds(buffered).filterDate(start,end)
   .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',65));
 var dates = ee.List(images.aggregate_array('system:time_start')).map(function(t) {
   return ee.Date(t).format('YYYY-MM-dd');
@@ -19,10 +20,10 @@ var clear = images.map(function(image) {
   return image.select(bands).multiply(0.0001).updateMask(mask)
     .copyProperties(image,['system:time_start','CLOUDY_PIXEL_PERCENTAGE']);
 });
-var composite = clear.sort('CLOUDY_PIXEL_PERCENTAGE',false).mosaic().clip(area);
+var composite = clear.sort('CLOUDY_PIXEL_PERCENTAGE',false).mosaic();
 var rgbStyle = {bands:['B4','B3','B2'],min:0,max:0.31,gamma:1.28};
 Map.centerObject(konya,8);
-Map.addLayer(composite,rgbStyle,'Sentinel-2 RGB · 20 Oct–24 Nov 2026');
+Map.addLayer(composite.clip(area),rgbStyle,'Sentinel-2 RGB · 20 Oct–24 Nov 2026');
 Map.addLayer(konya.style({color:'FCE9AA',width:2,fillColor:'00000000'}),{},'Konya Province');
 var stamp = ui.Label('Konya · Sentinel-2 image dates loading…');
 Map.add(ui.Panel({widgets:[stamp],style:{position:'bottom-left',backgroundColor:'#ffffff',padding:'6px'}}));
@@ -46,8 +47,29 @@ var features = ndvi.addBands([ndbi,mndwi,dem.setDefaultProjection(grid),slope.se
   .reduceNeighborhood({reducer:ee.Reducer.mean().combine(ee.Reducer.stdDev(),'',true),kernel:kernel})
   .select(['ndvi_mean','ndbi_mean','mndwi_mean','elevation_mean','slope_mean','ndvi_stdDev','elevation_stdDev'],
           ['ndvi_600m','ndbi_600m','mndwi_600m','elevation_600m','slope_600m','ndvi_sd_600m','elevation_sd_600m'])
-  .clip(area);
-Export.image.toDrive({image:composite.visualize(rgbStyle),description:'Konya_Sentinel2_RGB_20261020_20261124',
-  region:area,scale:200,crs:'EPSG:32636',maxPixels:1e9});
-Export.image.toDrive({image:features.toFloat(),description:'Konya_GEE_Features_600m',
-  region:area,scale:200,crs:'EPSG:32636',maxPixels:1e9});
+  .clip(buffered).float();
+
+var exportImage = features.unmask(-9999,false).addBands(composite.visualize(rgbStyle).float());
+var tiles = [
+  ['NW',346000,4209000,487400,4352400],
+  ['NE',487400,4209000,629000,4352400],
+  ['SW',346000,4065800,487400,4209000],
+  ['SE',487400,4065800,629000,4209000]
+];
+var downloadPanel = ui.Panel({style:{position:'top-right',width:'250px',padding:'6px'}});
+var downloadButton = ui.Button('Prepare GIS GeoTIFF tiles',function() {
+  downloadButton.setDisabled(true);
+  tiles.forEach(function(tile) {
+    var label = ui.Label(tile[0]+' preparing…');
+    downloadPanel.add(label);
+    var region = ee.Geometry.Rectangle(tile.slice(1),'EPSG:32636',false);
+    exportImage.getDownloadURL({name:'Konya_GEE_'+tile[0],region:region,crs:'EPSG:32636',
+      scale:200,format:'GEO_TIFF',filePerBand:false},function(url,error) {
+      if (error || !url) { label.setValue(tile[0]+' failed: '+error); return; }
+      label.setValue('Download '+tile[0]);
+      label.setUrl(url);
+    });
+  });
+});
+downloadPanel.add(downloadButton);
+Map.add(downloadPanel);

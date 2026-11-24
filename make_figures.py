@@ -62,7 +62,8 @@ def main():
         rgb=np.dstack([raw,alpha]).astype('uint8')
         ext=plotting_extent(file)
     meta=json.loads((GEO/'raster_provenance.json').read_text())
-    dates=sorted({s['datetime'][:10] for s in meta['sentinel_scenes'] if s['used_cells_in_study_area']})
+    dates=meta.get('acquisition_range_utc') or sorted({s['datetime'][:10] for s in meta['sentinel_scenes'] if s['used_cells_in_study_area']})
+    family=json.loads((OUT/'model_evaluation.json').read_text(encoding='utf8'))['best_model']
     fig,ax=plt.subplots(figsize=(8.6,5.3))
     map_frame(ax,boundary)
     ax.imshow(rgb,extent=ext,interpolation='nearest')
@@ -113,8 +114,8 @@ def main():
            'slope_600m':'Mean slope','transit_count_1km':'Transit features within 1 km'}
     fig,ax=plt.subplots(figsize=(8.4,4.4),layout='constrained')
     ax.barh(shap.feature.map(names),shap.mean_abs_shap,color=['#5e9887']*7+['#245d4b']*3,height=.66)
-    ax.set(xlabel='Mean absolute TreeSHAP contribution · log(1 + TL/m²)',xlim=(0,.57))
-    ax.set_title('LightGBM | Most influential predictors',loc='left',pad=9)
+    ax.set(xlabel='Mean absolute TreeSHAP contribution · log(1 + TL/m²)',xlim=(0,float(shap.mean_abs_shap.max())*1.12))
+    ax.set_title(f'{family} | Most influential predictors',loc='left',pad=9)
     ax.xaxis.grid(alpha=.2); ax.set_axisbelow(True); ax.spines['left'].set_visible(False); ax.tick_params(axis='y',length=0)
     for i,v in enumerate(shap.mean_abs_shap): ax.text(v+.008,i,f'{v:.3f}',va='center',fontsize=8)
     save(fig,'04_konya_shap.png')
@@ -127,13 +128,13 @@ def main():
         matched=lisa.loc[lisa.fold.eq(fold)]
         ax.scatter(matched.x,matched.y,s=19,c=color,edgecolors='white',lw=.25,label=f'Fold {fold}')
     ax.set_title('Held-out spatial folds',loc='left'); ax.legend(loc='upper left',fontsize=7)
-    x=oof.observed_tl_m2; y=oof.LightGBM
+    x=oof.observed_tl_m2; y=oof[family]
     ax=axes[1]
     ax.scatter(np.log10(x+1),np.log10(y+1),s=17,color='#397666',alpha=.63,edgecolors='none')
     end=max(np.log10(x+1).max(),np.log10(y+1).max())
     ax.plot([0,end],[0,end],ls='--',c='#a86e45',lw=1)
     ax.set(xlabel='Observed asking price · log₁₀(1 + TL/m²)',ylabel='Predicted · log₁₀(1 + TL/m²)',xlim=(0,end+.16),ylim=(0,end+.16))
-    ax.set_title('LightGBM out-of-fold predictions',loc='left'); ax.grid(alpha=.2)
+    ax.set_title(f'{family} out-of-fold predictions',loc='left'); ax.grid(alpha=.2)
     save(fig,'05_konya_spatial_validation.png')
 
 

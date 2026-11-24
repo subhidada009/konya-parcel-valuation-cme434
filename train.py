@@ -18,6 +18,7 @@ from modeling import compare, explain, moran_statistics, predict
 DATA = ROOT/'data'
 OUT = ROOT/'artifacts'
 CREATED_ON = '2026-11-24'
+MODEL_VERSION = 'v1.1.0'
 CADASTRAL = ['province','district','neighborhood','ada_no','parsel_no']
 PRIVATE_DTYPES = dict.fromkeys(['ilan_no','ada_no','parsel_no','emsal','gabari'],str)
 
@@ -175,7 +176,7 @@ def run(private_source=None, private_output=None):
     ref_area = float(reference[zoning])
     predicted = predict(model,grid.assign(area_m2=ref_area,imar_durumu=zoning))
     grid_meta = persist_grid(grid,aff,size,predicted,zoning,ref_area)
-    meta = {'version':'v1.0.0','date':CREATED_ON,'best_model':metrics['best_model'],'reference_area_by_zoning':reference,
+    meta = {'version':MODEL_VERSION,'date':CREATED_ON,'best_model':metrics['best_model'],'reference_area_by_zoning':reference,
             'grid':grid_meta,'features':list(FEATURES),'shap':shap_meta,
             'training_missing_count':rows[list(FEATURES)].isna().sum().astype(int).to_dict(),
             'training_gap_filled_n':int((rows.raster_gap_filled_n>0).sum()),

@@ -43,15 +43,15 @@ CSV text is UTF-8. CSV and GeoJSON use longitude and latitude in WGS84 (EPSG:432
 
 ## Spatial predictors and support flags
 
-The model uses the following 15 spatial fields plus area and zoning. Copernicus and OSM data are static releases in this build. The imagery query was 20 October through 24 November 2026. `raster_provenance.json` contains individual acquisitions, native resolutions, assets and the amount of each used scene. The OSM extract is dated 23 November 2026. See [data sources](DATA_SOURCES.md) and both provenance JSON files in `data/geo/`.
+The model uses the following 15 spatial fields plus area and zoning. Earth Engine's Sentinel-2 query ran from 20 October through 24 November 2026 and returned scenes acquired from 20 October through 23 November 2026. `raster_provenance.json` records the source collections, acquisition range, modelling resolution and exports. The OSM extract is dated 23 November 2026. See [data sources](DATA_SOURCES.md) and both provenance JSON files in `data/geo/`.
 
 | Column | Unit | Source, resolution and transformation |
 |---|---|---|
 | `ndvi_600m` | ratio, −1…1 | Sentinel-2 B08 and B04, 10 m native, 200 m working cell. Mean `(NIR−Red)/(NIR+Red)` within 600 m. |
 | `ndbi_600m` | ratio, −1…1 | Sentinel-2 B11 at 20 m and B08 at 10 m, 200 m working cell. Mean `(SWIR−NIR)/(SWIR+NIR)` within 600 m. |
 | `mndwi_600m` | ratio, −1…1 | Sentinel-2 B03 at 10 m and B11 at 20 m, 200 m working cell. Mean `(Green−SWIR)/(Green+SWIR)` within 600 m. |
-| `elevation_600m` | m | Copernicus DEM GLO-30 digital surface model, STAC tiles dated 22 April 2021, ~30 m native, 200 m working cell. Mean within 600 m. |
-| `slope_600m` | degrees | Derived from DEM gradients at 200 m, then mean within 600 m. |
+| `elevation_600m` | m | Copernicus DEM GLO-30 digital surface model in Earth Engine. TanDEM-X acquisitions 2011–2015, ~30 m native, 200 m working cell. Mean within 600 m. |
+| `slope_600m` | degrees | Earth Engine terrain slope calculated from the DEM at 30 m, sampled to the 200 m working grid and averaged within 600 m. |
 | `ndvi_sd_600m` | ratio | Population standard deviation of accepted NDVI cells within 600 m. Same source dates and pixel sizes as NDVI. |
 | `elevation_sd_600m` | m | Population standard deviation of DEM cells within 600 m; same dates and pixel sizes as elevation. |
 | `dist_city_centre_m` | m | OSM Konya `place=city` point, Euclidean UTM distance. Source vector. |

@@ -4,9 +4,9 @@
     {"name": "DDA, SUBHI YASER SUBHI", "affiliation": "Karabük University, Department of Computer Engineering"},
     {"name": "Shalaby, Magd", "affiliation": "Karabük University, Department of Computer Engineering"}
   ],
-  "description": "CME434 Geographic Information Systems, Karabük University. Supervisor: Dr. Öğr. Üyesi Sohaib K. M. Abujayyab. Spatially cross-validated Konya land asking-price analysis and an offline-capable Python Web GIS. The release includes reproducible code, derived features, a trained model, and a reduced public listing schema. Study results are guidance only.",
+  "description": "CME434 Geographic Information Systems, Karabük University. Supervisor: Dr. Öğr. Üyesi Sohaib K. M. Abujayyab. Spatially cross-validated Konya land asking-price analysis and an offline-capable Python Web GIS. The release includes reproducible code, local Sentinel-2 and terrain layers exported from Google Earth Engine, OSM accessibility features, a trained XGBoost model and a reduced public listing schema. Study results are guidance only.",
   "upload_type": "software",
   "access_right": "open",
   "license": "mit",
-  "keywords": ["Konya", "land valuation", "GIS", "spatial cross-validation", "LightGBM", "CME434"]
+  "keywords": ["Konya", "land valuation", "GIS", "spatial cross-validation", "XGBoost", "Google Earth Engine", "CME434"]
 }

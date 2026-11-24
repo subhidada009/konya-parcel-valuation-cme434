@@ -56,8 +56,9 @@ def check():
     assert get('value_surface_png','/api/grid?mode=index&format=png').data.startswith(b'\x89PNG')
     assert get('filtered_value_surface_png','/api/grid?mode=index&value_class=2&format=png').data.startswith(b'\x89PNG')
     scenario='/api/grid?zoning=Konut&mode=delta&scenario=park&scenario_latitude=37.70&scenario_longitude=32.20'
-    assert get('park_scenario',scenario).json['scenario_changed_cells']>0
-    assert get('transit_scenario',scenario.replace('scenario=park','scenario=transit')).json['scenario_changed_cells']>0
+    park=get('park_scenario',scenario).json['scenario_changed_cells']
+    transit=get('transit_scenario',scenario.replace('scenario=park','scenario=transit')).json['scenario_changed_cells']
+    assert park>0 and transit>0
     for name in ('listings.csv','features.csv','listings.geojson','features.geojson'):
         get('template_'+name,'/api/template/'+name)
     get('listing_download','/api/listings?budget=5000000&filter_zoning=Tarla&download=csv')
@@ -88,13 +89,14 @@ def check():
     assert abs(updated.price_index.median()-100)<1e-10 and not np.allclose(frame.predicted_tl_m2,updated.predicted_tl_m2)
     validated=get('updated_version_metadata','/api/meta?version='+payload['version']).json
     assert validated['comparison']['before']['rmse']>0 and validated['comparison']['after']['rmse']>0
-    assert get('base_remains_available','/api/meta').json['version']=='v1.0.0'
+    assert get('base_remains_available','/api/meta').json['version']==health['version']
     with rasterio.open(ROOT/'artifacts/valuation_grid_1km.tif') as dataset:
         image=dataset.read()
         assert dataset.crs.to_epsg()==32636 and dataset.res==(1000,1000)
         assert int(np.isfinite(image[0]).sum())==40771 and np.median(image[1][np.isfinite(image[1])])==100
     visited['geotiff_grid_crs_and_index']=True
-    return {'checks':visited,'synthetic_update':payload['comparison']}
+    return {'checks':visited,'synthetic_update':payload['comparison'],
+            'scenario_changed_cells':{'park':park,'transit':transit}}
 
 
 if __name__=='__main__':

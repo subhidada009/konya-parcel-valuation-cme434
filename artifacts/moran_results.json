@@ -24,9 +24,9 @@
     "weights": "symmetric kNN, row standardized"
   },
   "oof_residual": {
-    "i": 0.030446882726601832,
+    "i": 0.054546210315939994,
     "expected_i": -0.0033444816053511705,
-    "p_two_sided": 0.047,
+    "p_two_sided": 0.027,
     "k": 8,
     "permutations": 999,
     "weights": "symmetric kNN, row standardized"

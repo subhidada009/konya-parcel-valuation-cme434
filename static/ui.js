@@ -4,7 +4,7 @@ const el = id => document.getElementById(id);
 const fmt = (value, digits = 0) => Number(value).toLocaleString("en-US", { maximumFractionDigits: digits, minimumFractionDigits: digits });
 const unitPrice = value => fmt(value, value < 1 ? 2 : value < 10 ? 1 : 0);
 const signed = (value, digits = 1) => `${value > 0 ? "+" : ""}${fmt(value, digits)}`;
-const state = { version: sessionStorage.getItem("konya-version") || "v1.0.0", view:"explore",
+const state = { version: sessionStorage.getItem("konya-version") || "", view:"explore",
   scenario:null, picking:false, overlay:null, pin:null, scenarioPin:null, listing:null, estimate:null, requestId:0 };
 const stops = { Underpriced:"#236f54", Fair:"#455d80", Overpriced:"#a65342" };
 let map, metadata, markers, boundary;
@@ -205,7 +205,7 @@ function modelDisplay(meta) {
     card.append(table);
   } else card.append(element("div",`Update benchmark · ${hold.test_n} locked test listings`));
   el("model-details").replaceChildren(card);
-  el("reset-model").hidden = meta.version === "v1.0.0";
+  el("reset-model").hidden = meta.version === meta.model.version;
 }
 
 async function switchModel(version) {
@@ -269,7 +269,7 @@ function listen() {
   el("check-form").addEventListener("submit",event=>{event.preventDefault();runEstimate();});
   el("scenario-form").addEventListener("submit",runScenario);
   el("upload-form").addEventListener("submit",upload);
-  el("reset-model").addEventListener("click",()=>switchModel("v1.0.0").catch(e=>error(e.message)));
+  el("reset-model").addEventListener("click",()=>switchModel(metadata.model.version).catch(e=>error(e.message)));
   el("reset-view").addEventListener("click",()=>map.fitBounds(boundary.getBounds(),{padding:[18,18]}));
   el("scenario-pick").addEventListener("click",()=> {
     state.picking = !state.picking;
@@ -300,11 +300,12 @@ function listen() {
 async function init() {
   try { metadata = await api(`/api/meta?version=${encodeURIComponent(state.version)}`); }
   catch (e) {
-    if (state.version === "v1.0.0") throw e;
-    state.version = "v1.0.0";
+    if (!state.version) throw e;
+    state.version = "";
     sessionStorage.removeItem("konya-version");
     metadata = await api("/api/meta");
   }
+  state.version = metadata.version;
   Object.keys(metadata.model.reference_area_by_zoning).forEach(zoning=>{
     ["zoning","check-zoning","filter-zoning"].forEach(id=>option(el(id),zoning));
   });
