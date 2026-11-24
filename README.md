@@ -10,7 +10,7 @@
 | SUBHI YASER SUBHI DDA | 2310213583 | Collected 150 records and handled the remaining programming work. |
 | Magd Shalaby | 2210213583 | Collected 150 records. |
 
-- **Public Web GIS:** Deployment pending verification.
+- **Public Web GIS:** [Konya Land Valuation on Render](https://konya-parcel-valuation-cme434.onrender.com/).
 - **Zenodo DOI:** Release archive pending verification.
 
 ## Results
@@ -47,6 +47,8 @@ python train.py
 ```
 
 `train.py` loads the reduced, screened public points, recomputes point-level features from local layers, repeats nested model selection, produces Moran/LISA and SHAP results, and regenerates the model and grid. A separate private mode validates the three supplied input files and exports `regression_dataset.csv`, a GeoPackage, a shapefile and the private appendix. See [the notebooks](notebooks) and [the data dictionary](data_dictionary.md). `prepare_geo.py` rebuilds the GIS layers from Earth Search COGs and an archived Geofabrik PBF. [Earth Engine Code Editor script](gee/konya_sentinel.js) provides the separate upstream Earth Engine workflow. [Data licences and attributions](DATA_SOURCES.md) document the shared layers.
+
+Run `python verify.py` for the local feature checks. The synthetic update is an application test, with its results saved in `artifacts/acceptance_tests.json`.
 
 ## Submission and publication
 
