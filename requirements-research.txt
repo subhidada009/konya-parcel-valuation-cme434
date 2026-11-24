@@ -1,0 +1,6 @@
+-r requirements.txt
+matplotlib==3.11.2
+pyogrio==0.13.0
+osmium==4.3.2
+shap==0.54.1
+jupyterlab>=4.4,<5

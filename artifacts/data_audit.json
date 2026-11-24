@@ -1,0 +1,87 @@
+{
+  "input_records": 302,
+  "model_records": 300,
+  "ad_dates": [
+    "2026-11-23",
+    "2026-11-24"
+  ],
+  "collection_dates": [
+    "2026-11-24"
+  ],
+  "source_domains": {
+    "www.sahibinden.com": 302
+  },
+  "districts_raw": 25,
+  "districts_modeled": 25,
+  "district_counts": {
+    "Meram": 60,
+    "Selçuklu": 56,
+    "Karatay": 54,
+    "Seydişehir": 25,
+    "Beyşehir": 14,
+    "Ilgın": 13,
+    "Bozkır": 11,
+    "Çumra": 11,
+    "Akören": 10,
+    "Akşehir": 8,
+    "Sarayönü": 8,
+    "Kadınhanı": 5,
+    "Ereğli": 4,
+    "Cihanbeyli": 3,
+    "Karapınar": 3,
+    "Güneysınır": 3,
+    "Hadim": 2,
+    "Hüyük": 2,
+    "Derebucak": 2,
+    "Altınekin": 1,
+    "Kulu": 1,
+    "Taşkent": 1,
+    "Yunak": 1,
+    "Derbent": 1,
+    "Tuzlukçu": 1
+  },
+  "zoning_counts": {
+    "Tarla": 124,
+    "Konut": 102,
+    "Bağ & Bahçe": 36,
+    "Villa": 15,
+    "Tarla + Bağ": 7,
+    "Arazi": 7,
+    "Sanayi": 3,
+    "Ticari + Konut": 3,
+    "Ticari": 1,
+    "Toplu Konut": 1,
+    "Özel Kullanım": 1
+  },
+  "missing_emsal_raw": 231,
+  "missing_gabari_raw": 267,
+  "non_numeric_gabari_raw": 10,
+  "outside_aoi": 1,
+  "duplicate_records_flagged": 2,
+  "duplicate_records_excluded": 1,
+  "collection_date_source": "supplied listing CSV",
+  "unit_tl_m2_quantiles": {
+    "0.0": 0.19309671519315852,
+    "0.25": 242.03414268809047,
+    "0.5": 1400.680126513044,
+    "0.75": 4557.312842196563,
+    "0.95": 16203.301654923813,
+    "1.0": 196428.57142857142
+  },
+  "area_m2_quantiles": {
+    "0.0": 31.0,
+    "0.25": 544.75,
+    "0.5": 1130.0,
+    "0.75": 5104.75,
+    "0.95": 38046.65000000003,
+    "1.0": 3884064.0
+  },
+  "price_tl_quantiles": {
+    "0.0": 36500.0,
+    "0.25": 772500.0,
+    "0.5": 2250000.0,
+    "0.75": 4906250.0,
+    "0.95": 25930000.000000007,
+    "1.0": 2750000000.0
+  }
+}

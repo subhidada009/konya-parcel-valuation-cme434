@@ -1,0 +1,110 @@
+{
+  "version": "v1.0.0",
+  "date": "2026-11-24",
+  "best_model": "LightGBM",
+  "reference_area_by_zoning": {
+    "Arazi": 4756.0,
+    "Bağ & Bahçe": 646.5,
+    "Konut": 602.5,
+    "Sanayi": 5040.0,
+    "Tarla": 5305.5,
+    "Tarla + Bağ": 993.0,
+    "Ticari": 180.0,
+    "Ticari + Konut": 1710.0,
+    "Toplu Konut": 800.0,
+    "Villa": 503.0,
+    "Özel Kullanım": 1600.0
+  },
+  "grid": {
+    "cells": 40771,
+    "reference_area_m2": 5305.5,
+    "reference_zoning": "Tarla",
+    "index_median_tl_m2": 126.67745903245518,
+    "cell_m": 1000,
+    "predicted_tl_m2_quantiles": {
+      "0": 28.427405708740153,
+      "0.05": 47.86663552476121,
+      "0.25": 75.72629012697152,
+      "0.5": 126.67745903245518,
+      "0.75": 228.20989358279382,
+      "0.95": 661.5123000877965,
+      "1": 17698.078959113795
+    },
+    "spectral_gaps_remaining": 0
+  },
+  "features": [
+    "area_m2",
+    "ndvi_600m",
+    "ndbi_600m",
+    "mndwi_600m",
+    "elevation_600m",
+    "slope_600m",
+    "ndvi_sd_600m",
+    "elevation_sd_600m",
+    "dist_city_centre_m",
+    "dist_main_road_m",
+    "dist_transit_m",
+    "dist_school_m",
+    "dist_hospital_m",
+    "dist_park_m",
+    "dist_waterway_m",
+    "transit_count_1km",
+    "imar_durumu"
+  ],
+  "shap": {
+    "scale": "log1p(TL/m²)",
+    "max_additivity_error": 2.4868995751603507e-14
+  },
+  "training_missing_count": {
+    "area_m2": 0,
+    "ndvi_600m": 0,
+    "ndbi_600m": 0,
+    "mndwi_600m": 0,
+    "elevation_600m": 0,
+    "slope_600m": 0,
+    "ndvi_sd_600m": 0,
+    "elevation_sd_600m": 0,
+    "dist_city_centre_m": 0,
+    "dist_main_road_m": 0,
+    "dist_transit_m": 0,
+    "dist_school_m": 0,
+    "dist_hospital_m": 0,
+    "dist_park_m": 0,
+    "dist_waterway_m": 0,
+    "transit_count_1km": 0,
+    "imar_durumu": 0
+  },
+  "training_gap_filled_n": 4,
+  "training_rows": 300,
+  "cv_metrics": {
+    "r2": 0.09354317452236938,
+    "rmse": 12996.76808401396,
+    "mae": 2686.8427733887365,
+    "median_signed_error": 51.65009029952563
+  },
+  "fixed_holdout_metrics": {
+    "blocks": [
+      "19:206",
+      "20:212",
+      "22:209",
+      "23:214",
+      "24:210",
+      "30:207",
+      "30:209"
+    ],
+    "test_n": 60,
+    "config": {
+      "params": {
+        "n_estimators": 135,
+        "num_leaves": 11,
+        "learning_rate": 0.04,
+        "min_child_samples": 12
+      },
+      "log_target": true
+    },
+    "r2": 0.15131052284036628,
+    "rmse": 12981.044118159161,
+    "mae": 4740.015647747612,
+    "median_signed_error": -844.2445801749523
+  }
+}

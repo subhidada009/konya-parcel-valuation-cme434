@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: "A GIS and ML-Based Land Parcel Valuation System for Decision Support: Konya Province, Türkiye"
+message: "Please cite the archived software release when using this work."
+type: software
+authors:
+  - given-names: SUBHI YASER SUBHI
+    family-names: DDA
+    affiliation: Karabük University
+  - given-names: Magd
+    family-names: Shalaby
+    affiliation: Karabük University
+version: 1.0.0
+repository-code: https://github.com/subhidada009/konya-parcel-valuation-cme434

@@ -1,0 +1,17 @@
+{
+  "source": "https://download.geofabrik.de/europe/turkey/turkey-261123.osm.pbf",
+  "snapshot_label": "2026-11-23",
+  "buffer_degrees": 0.3,
+  "counts": {
+    "city_centre": 1,
+    "main_road": 5378,
+    "transit": 1563,
+    "school": 689,
+    "hospital": 60,
+    "park": 1038,
+    "waterway": 394
+  },
+  "license": "ODbL 1.0",
+  "attribution": "OpenStreetMap contributors",
+  "prepared_utc": "2026-11-24T17:04:30.900348+00:00"
+}

@@ -1,0 +1,15 @@
+Flask==3.1.3
+waitress==3.0.2
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1
+scikit-learn==1.9.1
+joblib==1.5.3
+lightgbm==4.7.0
+xgboost==3.4.1
+rasterio==1.5.2
+pyproj==3.8.0
+shapely==2.2.0
+Pillow==13.0.0
+affine==3.0.1
+tzdata==2026.6

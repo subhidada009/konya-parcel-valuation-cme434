@@ -1,0 +1,8 @@
+.git
+.venv
+__pycache__
+notebooks
+private
+*PRIVATE*
+*private*
+regression_dataset.csv

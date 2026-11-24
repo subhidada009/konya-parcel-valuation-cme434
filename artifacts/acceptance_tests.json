@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "app_names_and_title": true,
+    "ready": true,
+    "model_metadata": true,
+    "location_and_listing_estimate": true,
+    "fair_price_underpriced": true,
+    "fair_price_fair": true,
+    "fair_price_overpriced": true,
+    "out_of_area_error": true,
+    "budget_area_zoning_search": true,
+    "listing_value_class": true,
+    "grid_download": true,
+    "value_surface_png": true,
+    "filtered_value_surface_png": true,
+    "park_scenario": true,
+    "transit_scenario": true,
+    "template_listings.csv": true,
+    "template_features.csv": true,
+    "template_listings.geojson": true,
+    "template_features.geojson": true,
+    "listing_download": true,
+    "invalid_upload_validation": true,
+    "updated_grid_and_index": true,
+    "updated_version_metadata": true,
+    "base_remains_available": true,
+    "geotiff_grid_crs_and_index": true
+  },
+  "synthetic_update": {
+    "after": {
+      "mae": 4824.903822034068,
+      "median_signed_error": -873.4975072542975,
+      "r2": 0.14223343723098847,
+      "rmse": 13050.278311167967
+    },
+    "before": {
+      "mae": 4740.015647747612,
+      "r2": 0.15131052284036628,
+      "rmse": 12981.044118159161
+    },
+    "fixed_test_n": 60,
+    "new_feature_rows": 1,
+    "new_listing_rows": 1,
+    "training_rows": 301
+  }
+}

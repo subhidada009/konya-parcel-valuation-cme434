@@ -1,0 +1,34 @@
+{
+  "unit_tl_m2": {
+    "i": 0.14822927502755098,
+    "expected_i": -0.0033444816053511705,
+    "p_two_sided": 0.001,
+    "k": 8,
+    "permutations": 999,
+    "weights": "symmetric kNN, row standardized",
+    "local_fdr_counts": {
+      "Not significant": 300
+    },
+    "local_nominal_counts": {
+      "Not significant": 267,
+      "High–High": 25,
+      "Low–High": 8
+    }
+  },
+  "log_unit_tl_m2": {
+    "i": 0.5595298777215826,
+    "expected_i": -0.0033444816053511705,
+    "p_two_sided": 0.001,
+    "k": 8,
+    "permutations": 999,
+    "weights": "symmetric kNN, row standardized"
+  },
+  "oof_residual": {
+    "i": 0.030446882726601832,
+    "expected_i": -0.0033444816053511705,
+    "p_two_sided": 0.047,
+    "k": 8,
+    "permutations": 999,
+    "weights": "symmetric kNN, row standardized"
+  }
+}

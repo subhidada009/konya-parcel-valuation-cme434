@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: konya-parcel-valuation-cme434
+    runtime: docker
+    plan: free
+    healthCheckPath: /health

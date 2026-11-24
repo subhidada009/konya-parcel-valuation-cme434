@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [{
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [32.51, 37.88]},
+    "properties": {"dist_park_m": 350, "dist_transit_m": 500}
+  }]
+}

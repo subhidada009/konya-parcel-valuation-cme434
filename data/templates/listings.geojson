@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [{
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [32.51, 37.88]},
+    "properties": {"price_tl": 1200000, "area_m2": 800, "imar_durumu": "Konut", "ilan_tarihi": "2026-11-24"}
+  }]
+}

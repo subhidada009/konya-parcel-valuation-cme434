@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Konya Land Valuation | CME434</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/leaflet.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+  <script defer src="{{ url_for('static',filename='vendor/leaflet.js') }}"></script>
+  <script defer src="{{ url_for('static',filename='ui.js') }}"></script>
+</head>
+<body>
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="brand">
+      <span class="course">KARABÜK UNIVERSITY · CME434</span>
+      <h1>Konya Land Valuation</h1>
+      <p>{{ title }}</p>
+    </div>
+    <div class="credits">
+      {% for name, number in students %}<span>{{ name }} <small>{{ number }}</small></span>{% endfor %}
+      <span>Supervisor <strong>{{ supervisor }}</strong></span>
+    </div>
+  </div>
+</header>
+<main class="workspace">
+  <nav class="tabs" aria-label="Workspace views">
+    <button type="button" data-view="explore" aria-pressed="true">Map &amp; listings</button>
+    <button type="button" data-view="check" aria-pressed="false">Fair-price check</button>
+    <button type="button" data-view="scenarios" aria-pressed="false">Scenarios</button>
+    <button type="button" data-view="update" aria-pressed="false">Data &amp; model</button>
+    <span id="model-version" class="version">Loading model…</span>
+  </nav>
+  <p class="notice" role="note">Model estimates are for guidance only. An official appraisal requires a licensed valuation expert.</p>
+  <p id="global-error" role="alert" class="error" hidden></p>
+  <div class="layout">
+    <section class="map-card" aria-label="Interactive valuation map">
+      <div class="map-head">
+        <div><h2>Konya Province</h2><p id="map-subtitle">Loading the 1 km valuation grid…</p></div>
+        <button class="secondary" type="button" id="reset-view">Fit province</button>
+      </div>
+      <div id="map" role="region" aria-label="Map of Konya. Coordinates can also be entered in the fair-price check."></div>
+      <div class="map-foot"><div id="legend" aria-label="Map legend"></div><span>© OpenStreetMap contributors</span></div>
+    </section>
+    <aside class="panel">
+      <section id="explore" class="view">
+        <h2>Explore values</h2>
+        <form id="search-form">
+          <div class="controls two">
+            <label>Map surface<select id="surface"><option value="price">Estimated TL/m²</option><option value="index">Price index</option><option value="delta">Scenario change</option></select></label>
+            <label>Map zoning<select id="zoning"></select></label>
+            <label>Map value class<select id="value-class"><option value="">All values</option></select></label>
+            <label>Listing zoning<select id="filter-zoning"><option value="">All zoning types</option></select></label>
+            <label>Budget ceiling (TL)<input id="budget" type="number" min="0" placeholder="Any budget"></label>
+            <label>Listing value class<select id="listing-class"><option value="">All values</option></select></label>
+            <label>Min. area (m²)<input id="min-area" type="number" min="0" placeholder="Any"></label>
+            <label>Max. area (m²)<input id="max-area" type="number" min="0" placeholder="Any"></label>
+          </div>
+          <button class="primary wide" type="submit">Apply search</button>
+        </form>
+        <div class="results-head"><h3>Best-value listings</h3><span id="listing-count" class="muted"></span></div>
+        <p class="hint">Ranked by asking price relative to the estimate. Select a row to view it on the map.</p>
+        <div id="listing-results" class="listing-results"></div>
+        <div class="actions"><a id="grid-download" class="secondary" download>Download grid</a><a id="listing-download" class="secondary" download>Download listings</a></div>
+      </section>
+      <section id="check" class="view" hidden>
+        <h2>Fair-price check</h2>
+        <p class="hint">Choose a listing, click a location, or enter coordinates. The fair band is ±15% of the model estimate.</p>
+        <form id="check-form">
+          <div class="controls two">
+            <label>Latitude<input id="lat" type="number" step="any" required></label>
+            <label>Longitude<input id="lon" type="number" step="any" required></label>
+            <label>Land area (m²)<input id="area" type="number" step="any" min="1" required></label>
+            <label>İmar durumu<select id="check-zoning"></select></label>
+            <label class="span">Total asking price (TL)<input id="asking" type="number" step="any" min="0" placeholder="Optional"></label>
+          </div>
+          <button class="primary wide" type="submit">Estimate value</button>
+        </form>
+        <div id="estimate-output" class="result-block" role="status"></div>
+        <button id="estimate-download" type="button" class="secondary" hidden>Download this estimate</button>
+      </section>
+      <section id="scenarios" class="view" hidden>
+        <h2>Accessibility scenarios</h2>
+        <p class="hint">Place a proposed park or transit station inside Konya. The model updates proximity and, for stations, nearby transit count.</p>
+        <form id="scenario-form">
+          <div class="controls two">
+            <label class="span">Proposed facility<select id="scenario-type"><option value="park">Park</option><option value="transit">Transit station</option></select></label>
+            <label>Latitude<input id="scenario-lat" type="number" step="any" required></label>
+            <label>Longitude<input id="scenario-lon" type="number" step="any" required></label>
+          </div>
+          <div class="actions"><button class="secondary" type="button" id="scenario-pick">Pick on map</button><button class="primary" type="submit">Run scenario</button></div>
+        </form>
+        <div id="scenario-output" class="result-block" role="status"></div>
+        <button id="scenario-clear" class="secondary" type="button" hidden>Clear scenario</button>
+      </section>
+      <section id="update" class="view" hidden>
+        <h2>Data &amp; model</h2>
+        <div id="model-details" class="result-block"></div>
+        <h3>Retrain with new data</h3>
+        <p class="hint">Upload CSV or WGS84 GeoJSON. Updated results stay in this browser session. Feature corrections apply within 150 m of their uploaded points.</p>
+        <form id="upload-form">
+          <label>New labelled listings<input id="upload-listings" name="listings" type="file" accept=".csv,.geojson,.json"></label>
+          <div class="template-links"><a href="/api/template/listings.csv">CSV template</a><a href="/api/template/listings.geojson">GeoJSON template</a></div>
+          <label>Spatial feature corrections<input id="upload-features" name="features" type="file" accept=".csv,.geojson,.json"></label>
+          <div class="template-links"><a href="/api/template/features.csv">CSV template</a><a href="/api/template/features.geojson">GeoJSON template</a></div>
+          <button class="primary wide" id="retrain-button" type="submit">Validate and retrain</button>
+        </form>
+        <div id="update-status" class="result-block" role="status"></div>
+        <button id="reset-model" class="secondary" type="button" hidden>Use original model</button>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer>Konya Province · 1 km prediction grid · Map units shown in Turkish lira per square metre</footer>
+</body></html>
